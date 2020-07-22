@@ -22,6 +22,17 @@ pub struct Button {
     pub texture: Option<Texture2D>,
 }
 
+impl std::fmt::Debug for Button {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Button")
+            .field("x", &self.x)
+            .field("y", &self.y)
+            .field("w", &self.w)
+            .field("h", &self.h)
+            .finish()
+    }
+}
+
 impl Button {
     pub fn new(x: f32, y: f32, w: f32, h: f32) -> Self {
         Button { x , y, w, h, text: None, texture: None }
@@ -63,7 +74,7 @@ impl Button {
         let w = self.w * screen_width();
         let h = self.h * screen_height();
 
-        // draw_rectangle(x, y, w, h, BLACK);
+        draw_rectangle(x, y, w, h, BLACK);
 
         if let Some(tex) = self.texture {
             draw_texture_ex(tex, x, y, WHITE, DrawTextureParams {
@@ -85,7 +96,7 @@ impl Button {
 
             draw_text(&text, 
                     x,
-                    y - (h / 4.),
+                    y, // - (h / 4.),
                     best_size,
                     *color);
         }

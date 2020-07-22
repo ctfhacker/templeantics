@@ -1,3 +1,4 @@
+#![feature(or_patterns)]
 use macroquad::*;
 
 mod button;
@@ -9,6 +10,8 @@ use traits::*;
 mod board;
 use board::Board;
 
+mod rng;
+use rng::Rng;
 
 struct Rules {
     texture: Texture2D
@@ -27,6 +30,10 @@ impl Drawable for Rules {
 enum State {
     Rules,
     Board
+}
+
+pub fn color_from_usize(r: usize, g: usize, b: usize, a: usize) -> Color {
+    Color::new(r as f32 / 255., g as f32 / 255., b as f32 / 255., a as f32 / 255.)
 }
 
 #[macroquad::main("TempleAntics")]
@@ -54,6 +61,10 @@ async fn main() {
     let mut rules_button = Button { x: 0.5, y: 0.95, w: 0.09, h: 0.04, 
         text: Some(("To Board".to_string(), RED)), texture: None };
 
+    let mut rng = Rng::new();
+
+    let mut rng_count = 0;
+
     // 0.0312407 0.57166123 0.051741533 0.06194806
     // 0.089999534 0.57197994 0.055775665 0.06312579
     // 0.07401181 0.52855253 0.07110771 0.035393357
@@ -76,6 +87,7 @@ async fn main() {
         }
 
         if mouse_click {
+
             if rules_button.contains(last_click) {
                 info!("Click rules button");
                 state = match state {
