@@ -20,6 +20,9 @@ pub struct Button {
     pub text: Option<(String, Color)>,
 
     pub texture: Option<Texture2D>,
+
+    /// Background color of the button
+    pub background_color: Option<Color>
 }
 
 impl std::fmt::Debug for Button {
@@ -35,15 +38,18 @@ impl std::fmt::Debug for Button {
 
 impl Button {
     pub fn new(x: f32, y: f32, w: f32, h: f32) -> Self {
-        Button { x , y, w, h, text: None, texture: None }
+        Button { x , y, w, h, text: None, texture: None, 
+            background_color: Some(BLACK) }
     }
 
     pub fn new_with_text(x: f32, y: f32, w: f32, h: f32, text: (String, Color)) -> Self {
-        Button { x , y, w, h, text: Some(text), texture: None }
+        Button { x , y, w, h, text: Some(text), texture: None,
+            background_color: Some(BLACK) }
     }
 
     pub fn new_with_texture(x: f32, y: f32, w: f32, h: f32, texture: Texture2D) -> Self {
-        Button { x , y, w, h, text: None, texture: Some(texture) }
+        Button { x , y, w, h, text: None, texture: Some(texture),
+            background_color: Some(BLACK) }
     }
     
     /// Converts the percentage coordinates to actual pixels on the current screen
@@ -74,7 +80,11 @@ impl Button {
         let w = self.w * screen_width();
         let h = self.h * screen_height();
 
-        draw_rectangle(x, y, w, h, BLACK);
+        if let Some(color) = self.background_color {
+            draw_rectangle(x, y, w, h, color);
+        } else {
+            draw_rectangle(x, y, w, h, BLACK);
+        }
 
         if let Some(tex) = self.texture {
             draw_texture_ex(tex, x, y, WHITE, DrawTextureParams {
@@ -127,5 +137,15 @@ impl Button {
     /// Modifies the texture of the current button
     pub fn change_texture(&mut self, texture: Texture2D) {
         self.texture = Some(texture);
+    }
+
+    /// Modifies the texture of the current button
+    pub fn delete_texture(&mut self) {
+        self.texture = None;
+    }
+
+    /// Modifies the background color of the current button
+    pub fn change_background_color(&mut self, color: Color) {
+        self.background_color = Some(color);
     }
 }

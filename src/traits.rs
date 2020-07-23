@@ -24,18 +24,17 @@ pub trait Drawable {
     fn debug_draw(&self) {
         if let Some(clickables) = self.clickables() {
             for (i, rect) in clickables.iter().enumerate() {
-
+                // Don't debug draw the walls for now
+                if rect.w == WALL_WIDTH || rect.h == WALL_WIDTH {
+                    continue;
+                }
                 let (x, y, w, h) = rect.to_screen();
 
-                if rect.h == 0.010 || rect.w == 0.010 {
-                    draw_rectangle(x, y, w, h, YELLOW);
-                } else {
-                    // Draw debug rectangle
-                    draw_rectangle_lines(x, y, w, h, 2., RED);
+                // Draw debug rectangle
+                draw_rectangle_lines(x, y, w, h, 2., RED);
 
-                    // Draw text
-                    draw_text(&format!("{}", i), x + 2., y + 2., 20., GREEN);
-                }
+                // Draw text
+                draw_text(&format!("{}", i), x + 2., y + 2., 20., GREEN);
             }
         }
     }

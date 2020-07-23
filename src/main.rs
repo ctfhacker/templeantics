@@ -1,3 +1,4 @@
+#![feature(vec_remove_item)]
 #![feature(or_patterns)]
 use macroquad::*;
 
@@ -36,6 +37,8 @@ pub fn color_from_usize(r: usize, g: usize, b: usize, a: usize) -> Color {
     Color::new(r as f32 / 255., g as f32 / 255., b as f32 / 255., a as f32 / 255.)
 }
 
+const WALL_WIDTH: f32 = 0.010;
+
 #[macroquad::main("TempleAntics")]
 async fn main() {
     // Current state state
@@ -59,7 +62,8 @@ async fn main() {
     let rules = Rules::new(rules_tex);
 
     let mut rules_button = Button { x: 0.5, y: 0.95, w: 0.09, h: 0.04, 
-        text: Some(("To Board".to_string(), RED)), texture: None };
+        text: Some(("To Board".to_string(), RED)), texture: None, 
+        background_color: Some(BLACK) };
 
     let mut rng = Rng::new();
 
@@ -108,7 +112,7 @@ async fn main() {
         match state {
             State::Board => {
                 board.draw();
-                board.debug_draw();
+                // board.debug_draw();
                 rules_button.change_text("To Rules".to_string());
             }
             State::Rules => {
